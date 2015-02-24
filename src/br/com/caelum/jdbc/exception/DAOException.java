@@ -1,4 +1,4 @@
-package br.com.caelum.jdbc.teste;
+package br.com.caelum.jdbc.exception;
 
 public class DAOException extends RuntimeException {
 
