@@ -10,8 +10,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.caelum.jdbc.ConnectionFactory;
+import br.com.caelum.jdbc.exception.DAOException;
 import br.com.caelum.jdbc.modelo.Contato;
-import br.com.caelum.jdbc.teste.DAOException;
 
 public class ContatoDao {
 	private Connection connection;
