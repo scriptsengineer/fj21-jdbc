@@ -26,7 +26,6 @@ public class ContatoDao {
 				" values (?,?,?,?)";
 		
 		try{
-			//prepared statement para inserção
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			
 			//seta os valores
@@ -42,6 +41,7 @@ public class ContatoDao {
 			throw new DAOException(ex);
 		}
 	}
+
 	
 	public List<Contato> getLista(){
 		try{
@@ -92,6 +92,39 @@ public class ContatoDao {
 		rs.close();
 		stmt.close();
 		return contato;
+		}catch(SQLException ex){
+			throw new DAOException(ex);
+		}
+	}
+	
+	public void altera(Contato contato){
+		String sql = "update contatos set nome=?, email=?,"+
+				"endereco=?, dataNascimento=? where id=?";
+		try{
+			//prepared statement para inserção
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			
+			//seta os valores
+			
+			stmt.setString(1,contato.getNome());
+			stmt.setString(2,contato.getEmail());
+			stmt.setString(3,contato.getEndereco());
+			stmt.setDate(4,new Date(contato.getDataNascimento().getTimeInMillis()));
+			stmt.setLong(5, contato.getId());
+			stmt.execute();
+			stmt.close();
+			
+		}catch(SQLException ex){
+			throw new DAOException(ex);
+		}
+	}
+	
+	public void remove(Contato contato){
+		try{
+			PreparedStatement stmt = connection.prepareStatement("delete from contatos where id=?");
+			stmt.setLong(1, contato.getId());
+			stmt.execute();
+			stmt.close();
 		}catch(SQLException ex){
 			throw new DAOException(ex);
 		}
