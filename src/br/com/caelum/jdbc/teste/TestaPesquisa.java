@@ -1,4 +1,4 @@
-package br.com.caelum.jdbc.dao;
+package br.com.caelum.jdbc.teste;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import br.com.caelum.jdbc.dao.ContatoDao;
 import br.com.caelum.jdbc.modelo.Contato;
 
 public class TestaPesquisa {
