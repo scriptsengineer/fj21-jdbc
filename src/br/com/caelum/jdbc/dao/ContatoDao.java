@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.com.caelum.jdbc.ConnectionFactory;
 import br.com.caelum.jdbc.modelo.Contato;
+import br.com.caelum.jdbc.teste.DAOException;
 
 public class ContatoDao {
 	private Connection connection;
@@ -38,7 +39,7 @@ public class ContatoDao {
 			stmt.execute();
 			stmt.close();
 		}catch(SQLException ex){
-			throw new RuntimeException(ex);
+			throw new DAOException(ex);
 		}
 	}
 	
@@ -49,17 +50,7 @@ public class ContatoDao {
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()){
-				//Criando o objeto contato
-				Contato contato = new Contato();
-				contato.setId(rs.getLong("id"));
-				contato.setNome(rs.getString("nome"));
-				contato.setEmail(rs.getString("email"));
-				contato.setEndereco(rs.getString("endereco"));
-				
-				//Montando a data através de Calendar
-				Calendar data = Calendar.getInstance();
-				data.setTime(rs.getDate("dataNascimento"));
-				contato.setDataNascimento(data);
+				Contato contato = daoForContato(rs);
 				
 				//adicionando o objeto à lista
 				contatos.add(contato);
@@ -68,7 +59,56 @@ public class ContatoDao {
 			stmt.close();
 			return contatos;
 		}catch(SQLException ex){
-			throw new RuntimeException(ex);
+			throw new DAOException(ex);
 		}
+	}
+	
+	public List<Contato> getLista(String pesquisa){
+		try{
+			List<Contato> contatos = new ArrayList<Contato>();
+			PreparedStatement stmt = this.connection.prepareStatement("select * from contatos where nome like '"+pesquisa+"'");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Contato contato = daoForContato(rs);
+				//adicionando o objeto à lista
+				contatos.add(contato);
+			}
+			rs.close();
+			stmt.close();
+			return contatos;
+		}catch(SQLException ex){
+			throw new DAOException(ex);
+		}
+	}
+	
+	public Contato getContato(Long id){
+		try{
+		Contato contato = new Contato();
+		PreparedStatement stmt = this.connection.prepareStatement("select * from contatos where id="+id);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()){
+			contato = daoForContato(rs);
+		}
+		rs.close();
+		stmt.close();
+		return contato;
+		}catch(SQLException ex){
+			throw new DAOException(ex);
+		}
+	}
+
+	private Contato daoForContato(ResultSet rs) throws SQLException {
+		//Criando o objeto contato
+		Contato contato = new Contato();
+		contato.setId(rs.getLong("id"));
+		contato.setNome(rs.getString("nome"));
+		contato.setEmail(rs.getString("email"));
+		contato.setEndereco(rs.getString("endereco"));
+		
+		//Montando a data através de Calendar
+		Calendar data = Calendar.getInstance();
+		data.setTime(rs.getDate("dataNascimento"));
+		contato.setDataNascimento(data);
+		return contato;
 	}
 }
