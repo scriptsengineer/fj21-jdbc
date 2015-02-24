@@ -11,7 +11,7 @@ public class TestaInsere {
 		contato.setNome("Guilherme");
 		contato.setEmail("guilhermemoraiscorrea@gmail.com");
 		contato.setEndereco("Rua Santa Rosa n07, Santa Maria, RS");
-		contato.setDataNascimento(new GregorianCalendar(1997,1,5));
+		contato.setDataNascimento(new GregorianCalendar(1997,0,5));
 		
 		ContatoDao dao = new ContatoDao();
 		dao.adicionaContato(contato);
